@@ -1,16 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const dbgr = require("debug")("development:mongoose");
+const config = require("config");
 
-const uri = process.env.MONGODB_URI;
+const uri = config.get("MONGODB_URI");
 if(!uri){
-    throw new Error('Setup the mongodb connection string in .env file');
+    throw new Error("Setup the mongodb connection string in .env file");
 }
 
 mongoose.connect(uri)
 .then(() => {
-    console.log("Connected to the database");
+    dbgr("Connected to the database");
 })
 .catch(err => {
-    console.log('Mongodb connection error', err.message);
+    dbgr("Mongodb connection error", err.message);
 });
 
 module.exports = mongoose;
