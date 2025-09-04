@@ -1,30 +1,29 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const cookieParser = require("cookie-parser");
-const path = require("path");
-const ownersRouter = require("./routes/ownersRouter");
-const usersRouter = require("./routes/usersRouter");
-const productsRouter = require("./routes/productsRouter");
-
-require("dotenv").config();
-const db = require("./config/mongoose-connection");
+const cookieParser = require('cookie-parser');
+const path = require('path');
+require('dotenv').config();
+require('./config/mongoose-connection');
+const ownersRouter = require('./routes/ownersRouter');
+const productsRouter = require('./routes/productsRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.use("/owners", ownersRouter);
-app.use("/users", usersRouter);
-app.use("/products", productsRouter);
+app.use('/owners', ownersRouter);
+app.use('/products', productsRouter);
 
-app.get("/", (req, res) => {
-    res.send("Hey, it's working");
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT,() => {
-    console.log("Server up and running");
+const PORT = 4400 || process.env.port;
+
+app.listen(PORT, () => {
+  console.log('Server up and running');
 });

@@ -3,6 +3,7 @@ const dbgr = require("debug")("development:mongoose");
 const config = require("config");
 
 const uri = config.get("MONGODB_URI");
+
 if(!uri){
     throw new Error("Setup the mongodb connection string in .env file");
 }
