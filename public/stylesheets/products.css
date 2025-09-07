@@ -1,11 +1,5 @@
-/* body {
-  font-family: Arial, sans-serif;
-  margin: 30px;
-} */
-
 .product-page {
   font-family: Arial, sans-serif;
-  margin: 30px;
 }
 
 .product-header {
@@ -79,8 +73,7 @@
 
 .product-actions {
   display: flex;
-  /* flex-direction: row; */
-  justify-content: right;
-  gap: 20px;
-  /* border: 2px solid red; */
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
 }

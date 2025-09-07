@@ -2,15 +2,16 @@
 <html>
   <head>
     <title>Luxvane Admin Dashboard</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" />
     <link rel="stylesheet" href="/stylesheets/dashboard.css" />
     <link rel="stylesheet" href="/stylesheets/header.css" />
   </head>
   <body>
     <%- include('../partials/header.ejs') %>
-    <div class="dashboard-container">
+    <div class="page-container dashboard-container">
       <main class="dashboard-main">
         <section class="dashboard-card">
-          <h2>Products</h2>
+          <h1 class="page-title">Products</h1>
           <p>
             Manage your catalog, edit prices, and control what appears in the
             store.
@@ -19,7 +20,7 @@
         </section>
 
         <section class="dashboard-card dashboard-card-muted">
-          <h2>Coming Soon</h2>
+          <h1 class="page-title">Coming Soon</h1>
           <p>
             Orders, analytics, and AI recommendations will appear here later.
           </p>

@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Products – Luxvane Admin</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css">
     <link rel="stylesheet" href="/stylesheets/products.css">
     <link rel="stylesheet" href="/stylesheets/header.css">
   </head>
@@ -17,14 +18,14 @@
     <% if (error && error.length > 0) { %>
       <div class="flash flash-error"><%= error %></div>
     <% } %>
-    <div class="product-page">
-      <h1>Existing Products</h1>
+    <div class="page-container product-page">
+      <h1 class="page-title">Existing Products</h1>
 
       <!-- CREATE PRODUCT BUTTON -->
       <div class="product-header">
-        <a href="/owners/products/create" class="create-btn">Create a new product</a>
+        <a href="/owners/products/create" class="btn btn-primary">Create a new product</a>
 
-        <a href="/owners/dashboard" class="create-btn">Back to Dashboard</a>
+        <a href="/owners/dashboard" class="btn btn-primary">Back to Dashboard</a>
       </div>
 
       <div class="products-grid">
@@ -39,11 +40,10 @@
             <%}%>
           <div class="product-actions">
 
-              <a href="/owners/products/<%= p._id %>/edit" class="edit-btn">
-                <button>Edit</button>
-              </a>
+              <a href="/owners/products/<%= p._id %>/edit" class="btn btn-outline">Edit</a>
+
               <form action="/owners/products/<%= p._id %>/delete" method="POST" class="delete-form">
-                <button type="submit" class="delete-btn">Delete</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
               </form>
           </div>
 

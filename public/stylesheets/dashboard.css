@@ -37,23 +37,3 @@
 .dashboard-card-muted {
   opacity: 0.85;
 }
-
-/* Buttons reused for dashboard */
-.btn {
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 6px;
-  /* font-size: 14px; */
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: black;
-  color: white;
-  border: none;
-}
-
-.btn-primary:hover {
-  background: #111827;
-}

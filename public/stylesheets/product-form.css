@@ -1,12 +1,3 @@
-.product-container {
-  font-size: medium;
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-size: 18px;
-  /* border: 2px solid red; */
-}
-
 .product-form-page {
   margin-top: 10px;
 }
@@ -20,8 +11,6 @@
 
 .product-form-header h1 {
   margin: 0;
-  font-size: 24px;
-  color: #111827;
 }
 
 .product-form {
@@ -30,7 +19,7 @@
   padding: 20px;
   border-radius: 12px;
   border: 1px solid rgb(221, 218, 218);
-  box-shadow: 0 4px 12px rgba(201, 31, 31, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 16px;
