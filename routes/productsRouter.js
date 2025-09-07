@@ -4,6 +4,7 @@ const isOwnerAuthenticated = require('../middlewares/isOwnerAuthenticated');
 const Product = require('../models/product-model');
 const mongoose = require('mongoose');
 const ownerModel = require('../models/owner-model');
+const multer = require('multer');
 
 //List all products
 router.get('/', isOwnerAuthenticated, async function (req, res) {
@@ -17,35 +18,53 @@ router.get('/create', isOwnerAuthenticated, async function (req, res) {
 });
 
 //Create a new product
-router.post('/create', isOwnerAuthenticated, async function (req, res) {
-  try {
-    const { name, price, image, description, discount } = req.body;
-
-    if (!name || !price || !image) {
-      return res.status(400).send('Invalid/missing fields');
-    }
-
-    const existing = await Product.findOne({ name: name.trim() });
-    if (existing) {
-      return res.status(400).send('Product already exists');
-    }
-
-    const newProduct = new Product({
-      name,
-      price,
-      image,
-      description,
-      discount,
-    });
-
-    await newProduct.save();
-    req.flash('success', 'Product created successfully');
-    res.redirect('/owners/products/create');
-    // return res.redirect('/owners/products');
-  } catch (err) {
-    return res.status(500).send(err.message);
-  }
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueFilename = Date.now() + '_' + file.originalname;
+    cb(null, uniqueFilename);
+  },
 });
+
+const upload = multer({ storage: storage });
+
+router.post(
+  '/create',
+  isOwnerAuthenticated,
+  upload.single('uploaded_file'),
+  async function (req, res) {
+    try {
+      const { name, price, description, discount } = req.body;
+      const image = `/uploads/${req.file.filename}`;
+
+      if (!name || !price || !image) {
+        return res.status(400).send('Invalid/missing fields');
+      }
+
+      const existing = await Product.findOne({ name: name.trim() });
+      if (existing) {
+        return res.status(400).send('Product already exists');
+      }
+
+      const newProduct = new Product({
+        name,
+        price,
+        image,
+        description,
+        discount,
+      });
+
+      await newProduct.save();
+      req.flash('success', 'Product created successfully');
+      res.redirect('/owners/products/create');
+      // return res.redirect('/owners/products');
+    } catch (err) {
+      return res.status(500).send(err.message);
+    }
+  },
+);
 
 //Show edit product form
 router.get('/:id/edit', isOwnerAuthenticated, async function (req, res) {

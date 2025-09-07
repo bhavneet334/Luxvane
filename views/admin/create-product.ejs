@@ -29,7 +29,7 @@
           </a>
         </div>
 
-        <form action="/owners/products/create" method="POST" class="product-form">
+        <form action="/owners/products/create" method="POST" class="product-form" enctype="multipart/form-data">
 
           <div class="form-row">
             <label for="name">Name</label>
@@ -42,8 +42,8 @@
           </div>
 
           <div class="form-row">
-            <label for="image">Image URL</label>
-            <input id="image" name="image" type="text" placeholder="https://..." required />
+            <label for="image">Image</label>
+            <input id="image" name="uploaded_file" type="file" required />
           </div>
 
           <div class="form-row">
