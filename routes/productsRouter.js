@@ -89,7 +89,7 @@ router.post('/:id/update', isOwnerAuthenticated, async function (req, res) {
       return res.status(404).send('Product not found');
     }
     req.flash('success', 'Product updated successfully');
-    return res.redirect('/owners/products', { owner: req.owner });
+    return res.redirect('/owners/products');
   } catch (err) {
     console.error('Error', err.message);
     return res.status(500).send('Server error');
