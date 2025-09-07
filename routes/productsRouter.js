@@ -20,7 +20,7 @@ router.post('/create', isOwnerAuthenticated, async function (req, res) {
   try {
     const { name, price, image, description, discount } = req.body;
 
-    if (!name || !price || !image || !description) {
+    if (!name || !price || !image) {
       return res.status(400).send('Invalid/missing fields');
     }
 
@@ -39,7 +39,8 @@ router.post('/create', isOwnerAuthenticated, async function (req, res) {
 
     await newProduct.save();
     req.flash('success', 'Product created successfully');
-    return res.redirect('/owners/products');
+    res.redirect('/owners/products/create');
+    // return res.redirect('/owners/products');
   } catch (err) {
     return res.status(500).send(err.message);
   }

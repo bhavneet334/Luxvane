@@ -4,8 +4,27 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 require('dotenv').config();
 require('./config/mongoose-connection');
+const session = require('express-session');
+const flash = require('connect-flash');
 const ownersRouter = require('./routes/ownersRouter');
 const productsRouter = require('./routes/productsRouter');
+
+app.use(
+  session({
+    secret: 'someVerySecretKey', // change this
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+
+app.use(flash());
+
+// Make flash messages available in all views
+app.use(function (req, res, next) {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

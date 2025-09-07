@@ -19,6 +19,15 @@
       </header>
 
       <main class="product-form-page">
+
+        <% if (success && success.length > 0) { %>
+            <div class="flash flash-success"><%= success %></div>
+        <% } %>
+
+        <% if (error && error.length > 0) { %>
+            <div class="flash flash-error"><%= error %></div>
+        <% } %>
+
         <div class="product-form-header">
           <h1>Create Product</h1>
           <a href="/owners/products" class="btn btn-outline"
@@ -26,7 +35,11 @@
           >
         </div>
 
-        <form action="/owners/products" method="POST" class="product-form">
+        <form
+          action="/owners/products/create"
+          method="POST"
+          class="product-form"
+        >
           <div class="form-row">
             <label for="name">Name</label>
             <input
@@ -79,7 +92,6 @@
               name="discount"
               type="number"
               min="0"
-              max="100"
               placeholder="Optional"
             />
           </div>
@@ -88,7 +100,7 @@
             <button type="submit" class="btn btn-primary">
               Create Product
             </button>
-            <a href="/owners/products" class="btn btn-outline">Cancel</a>
+            <a href="/owners/products/create" class="btn btn-outline">Cancel</a>
           </div>
         </form>
       </main>

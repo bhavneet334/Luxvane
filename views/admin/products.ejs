@@ -1,10 +1,42 @@
-<p>Existing Products</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Products – Luxvane Admin</title>
+    <link rel="stylesheet" href="/stylesheets/products.css">
+  </head>
+  <body>
 
-<p>Name:<%= products.name %></p>
-<p>Price: <%= products.price %></p>
-<p>Description: <%= products.description %></p>
-<p>Discount: <%= products.discount %></p>
+    <!-- FLASH MESSAGES -->
+    <% if (success && success.length > 0) { %>
+      <div class="flash flash-success"><%= success %></div>
+    <% } %>
 
-<img src="<%= products.image %>" width="200" />
+    <% if (error && error.length > 0) { %>
+      <div class="flash flash-error"><%= error %></div>
+    <% } %>
 
-<a href="/owners/products/create">Create a new product</a>
+    <h1>Existing Products</h1>
+
+    <!-- CREATE PRODUCT BUTTON -->
+    <div class="product-header">
+      <a href="/owners/products/create" class="create-btn">Create a new product</a>
+
+      <a href="/owners/dashboard" class="create-btn">Back to Dashboard</a>
+    </div>
+
+     <div class="products-grid">
+      <% products.forEach(p => { %>
+        <div class="product-card">
+          <img src="<%= p.image %>" class="product-img" />
+          <h2 class="product-name"><%= p.name %></h2>
+          <p class="product-price"><%= p.price %>$</p>
+          <p class="product-desc"><%= p.description %></p>
+          <%if(p.discount && p.discount > 0){%>
+            <p class="product-discount">Discount :<%= p.discount %>%</p>
+          <%}%>
+        </div>
+      <% }) %>
+    </div>
+
+  </body>
+</html>
