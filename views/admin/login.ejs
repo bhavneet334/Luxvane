@@ -7,18 +7,18 @@
 </head>
 <body>
 
-    <h1>Welcome to the admin login page - owners route</h1>
-        <form action="/owners/login" method="POST">
+    <div class="login-div">
+        <h2>Luxvane Admin</h2>
+        <form action="/owners/login" method="POST" class="form">
 
-            <label>Email:</label>
-            <input type="email" name="email" required />
+            <label>Username</label>
+            <input type="Email" placeholder="Email" name="email" required />
 
-            <label>Password:</label>
-            <input type="password" name="password" required />
+            <label>Password</label>
+            <input type="password" placeholder="Password" name="password" required />
 
             <button type="submit">Login</button>
-
         </form>
-
+    </div>
 </body>
 </html>

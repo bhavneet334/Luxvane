@@ -1,5 +1,41 @@
-<h1>Welcome <%= owner.email %></h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Luxvane Admin Dashboard</title>
+    <link rel="stylesheet" href="/stylesheets/dashboard.css" />
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-container">
 
-<a href="/owners/products">Manage Products</a>
+      <header class="dashboard-header">
+        <div class="dashboard-brand">
+          <span class="logo-circle">L</span>
+          <span class="brand-name">Luxvane Admin</span>
+        </div>
 
-<a href="/owners/logout" class="btn btn-danger">Logout</a>
+        <div class="dashboard-user">
+          <span class="user-email"><%= owner.email %></span>
+          <a href="/owners/logout" class="btn btn-outline">Logout</a>
+        </div>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="dashboard-card">
+          <h2>Products</h2>
+          <p>
+            Manage your catalog, edit prices, and control what appears in the
+            store.
+          </p>
+          <a href="/owners/products" class="btn btn-primary">Manage Products</a>
+        </section>
+
+        <section class="dashboard-card dashboard-card-muted">
+          <h2>Coming Soon</h2>
+          <p>
+            Orders, analytics, and AI recommendations will appear here later.
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

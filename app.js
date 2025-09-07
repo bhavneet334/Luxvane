@@ -19,7 +19,7 @@ app.use('/owners', ownersRouter);
 app.use('/owners/products', productsRouter);
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('admin/login');
 });
 
 const PORT = 4400 || process.env.port;
