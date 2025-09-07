@@ -3,16 +3,17 @@ const router = express.Router();
 const isOwnerAuthenticated = require('../middlewares/isOwnerAuthenticated');
 const Product = require('../models/product-model');
 const mongoose = require('mongoose');
+const ownerModel = require('../models/owner-model');
 
 //List all products
 router.get('/', isOwnerAuthenticated, async function (req, res) {
   const products = await Product.find();
-  res.render('admin/products', { products });
+  res.render('admin/products', { products, owner: req.owner });
 });
 
 //Show create product form
 router.get('/create', isOwnerAuthenticated, async function (req, res) {
-  res.render('admin/create-product');
+  res.render('admin/create-product', { owner: req.owner });
 });
 
 //Create a new product
@@ -60,7 +61,7 @@ router.get('/:id/edit', isOwnerAuthenticated, async function (req, res) {
       return res.status(404).send('Product does not exist');
     }
 
-    res.render('edit-product', { product });
+    res.render('admin/edit-product', { product, owner: req.owner });
   } catch (err) {
     console.error('Cannot get edit', err);
     return res.status(500).send('Internal server error');
@@ -88,7 +89,7 @@ router.post('/:id/update', isOwnerAuthenticated, async function (req, res) {
       return res.status(404).send('Product not found');
     }
     req.flash('success', 'Product updated successfully');
-    return res.redirect('/owners/products');
+    return res.redirect('/owners/products', { owner: req.owner });
   } catch (err) {
     console.error('Error', err.message);
     return res.status(500).send('Server error');

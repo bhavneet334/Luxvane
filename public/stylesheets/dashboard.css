@@ -4,46 +4,7 @@
   margin: 40px auto;
   padding: 0 20px;
   font-size: 18px;
-}
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.dashboard-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logo-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: black;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.brand-name {
-  font-size: 22px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.dashboard-user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  /* font-size: 14px; */
-  color: #4b5563;
+  /* border: 2px solid red; */
 }
 
 .dashboard-main {
@@ -71,8 +32,7 @@
   color: #4b5563; /* instead of #6b7280 */
 }
 
-  /* font-size: 14px; */
-}
+/* font-size: 14px; */
 
 .dashboard-card-muted {
   opacity: 0.85;
@@ -96,14 +56,4 @@
 
 .btn-primary:hover {
   background: #111827;
-}
-
-.btn-outline {
-  border: 1px solid #d1d5db;
-  color: #374151;
-  background: white;
-}
-
-.btn-outline:hover {
-  background: #f3f4f6;
 }

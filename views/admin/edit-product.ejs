@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Create Product – Luxvane Admin</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit product page</title>
     <link rel="stylesheet" href="/stylesheets/dashboard.css" />
-    <link rel="stylesheet" href="/stylesheets/header.css" />
-    <link rel="stylesheet" href="/stylesheets/create-product.css" />
+    <link rel="stylesheet" href="/stylesheets/edit-product.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
 
-  </head>
-  <body>
-    <%- include("../partials/header.ejs") %> 
-    <div class="product-container">
-
+     <div class="product-container">
       <main class="product-form-page">
 
         <% if (success && success.length > 0) { %>
@@ -22,17 +23,15 @@
         <% } %>
 
         <div class="product-form-header">
-          <h1>Create Product</h1>
+          <h1>Edit Product</h1>
           <a href="/owners/products" class="btn btn-outline"
             >Back to Products</a
           >
         </div>
 
-        <form
-          action="/owners/products/create"
-          method="POST"
-          class="product-form"
-        >
+
+        <form actions="/owners/products/<%=product._id%>/update" method="POST" class="product-form">
+
           <div class="form-row">
             <label for="name">Name</label>
             <input
@@ -91,12 +90,16 @@
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">
-              Create Product
+              Update Product
             </button>
-            <a href="/owners/products/create" class="btn btn-outline">Cancel</a>
+            <a href="/owners/products" class="btn btn-outline">Cancel</a>
           </div>
         </form>
       </main>
     </div>
   </body>
+</html>
+
+    
+</body>
 </html>

@@ -3,22 +3,11 @@
   <head>
     <title>Luxvane Admin Dashboard</title>
     <link rel="stylesheet" href="/stylesheets/dashboard.css" />
+    <link rel="stylesheet" href="/stylesheets/header.css" />
   </head>
-  <body class="dashboard-body">
+  <body>
+    <%- include('../partials/header.ejs') %>
     <div class="dashboard-container">
-
-      <header class="dashboard-header">
-        <div class="dashboard-brand">
-          <span class="logo-circle">L</span>
-          <span class="brand-name">Luxvane Admin</span>
-        </div>
-
-        <div class="dashboard-user">
-          <span class="user-email"><%= owner.email %></span>
-          <a href="/owners/logout" class="btn btn-outline">Logout</a>
-        </div>
-      </header>
-
       <main class="dashboard-main">
         <section class="dashboard-card">
           <h2>Products</h2>

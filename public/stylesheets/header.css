@@ -1,0 +1,82 @@
+.topbar {
+  margin: 40px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  /* border: 2px solid red; */
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(170, 76, 159);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.brand-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: rgb(170, 76, 159);
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #4b5563;
+}
+
+.owner-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: block;
+  border: 1px solid black;
+}
+
+.avatar {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar:hover::after {
+  content: attr(data-email);
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  transform: translateX(-50%);
+  color: white;
+  background-color: black;
+  padding: 4px 2px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  background: white;
+}
+
+.logout-btn:hover {
+  background: #f3f4f6;
+}

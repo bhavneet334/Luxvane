@@ -1,8 +1,13 @@
 <div class="topbar">
-  <h2 class="logo">Luxvane Admin</h2>
+  <div class="topbar-brand">
+    <span class="brand-logo">L</span>
+    <span class="brand-name">Luxvane Admin</span>
+  </div>
 
-  <div class="topbar-right">
-    <span class="owner-email"><%= owner.email %></span>
+  <div class="topbar-user">
+      <div class="avatar" data-email="<%= owner.email %>">
+        <img src="/images/owner-avatar.png" class="owner-avatar">
+      </div>
     <a href="/owners/logout" class="logout-btn">Logout</a>
   </div>
 </div>

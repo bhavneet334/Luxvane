@@ -1,4 +1,9 @@
-body {
+/* body {
+  font-family: Arial, sans-serif;
+  margin: 30px;
+} */
+
+.product-page {
   font-family: Arial, sans-serif;
   margin: 30px;
 }
@@ -70,4 +75,12 @@ body {
   font-size: 14px;
   margin-top: 8px;
   font-weight: bold;
+}
+
+.product-actions {
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: right;
+  gap: 20px;
+  /* border: 2px solid red; */
 }
