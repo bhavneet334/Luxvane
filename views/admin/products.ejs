@@ -10,21 +10,64 @@
 
     <div class="admin-shell">
 
-      <!-- SIDEBAR -->
-      <!-- <aside class="products-sidebar">
-        <h4>All Products</h4>
-        <h4>Filter by Categories</h4>
-      </aside> -->
+      <aside class="admin-sidebar">
+        <div class="sidebar-header">
+          <a href="/owners/products/create" class="sidebar-create-btn">
+            + Create Product
+          </a>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <!-- Main Navigation -->
+          <div class="nav-section">
+            <a href="/owners/dashboard" class="nav-item">
+              <span class="nav-icon">📊</span>
+              <span class="nav-label">Dashboard</span>
+            </a>
+            
+            <a href="/owners/products" class="nav-item">
+              <span class="nav-icon">📦</span>
+              <span class="nav-label">All Products</span>
+            </a>
+          </div>
+          
+          <!-- Category Filters -->
+          <div class="nav-section">
+            <div class="nav-section-header">
+              <span class="nav-section-title">Categories</span>
+            </div>
+            <div class="nav-section-content">
+              <% if (categories && categories.length > 0) { %>
+                <% categories.forEach(function(category) { %>
+                  <a href="/owners/products?category=<%= category._id %>" 
+                     class="nav-item nav-item-sub <%= selectedCategory === category._id.toString() ? 'active' : '' %>">
+                    <span class="nav-label"><%= category.name %></span>
+                  </a>
+                <% }); %>
+              <% } else { %>
+                <div class="nav-empty">No categories</div>
+              <% } %>
+            </div>
+          </div>
+        </nav>
+      </aside>
 
-      <aside class="products-sidebar">
+      <!-- <aside class="products-sidebar">
         <a href="/owners/products/create" class="btn btn-primary">
           + Create product
         </a>
 
-        <h4 class="active">All Products</h4>
+        <a href="/owners/products" class="<%= !selectedCategory ? 'active' : '' %>"> All products </a>
+        
         <h4>Filter by Categories</h4>
-      </aside>
-
+        <% categories.forEach(function(category) { %>
+          <h4 class="<%= selectedCategory === category._id.toString() ? 'active' : '' %>">
+            <a href="/owners/products?category=<%= category._id %>">
+              <%= category.name %>
+            </a>
+          </h4>
+        <% }); %>
+      </aside> -->
 
       <!-- MAIN AREA -->
       <div class="admin-main">
