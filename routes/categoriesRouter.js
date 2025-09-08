@@ -4,6 +4,12 @@ const router = express.Router();
 const Category = require('../models/category-model');
 const isOwnerAuthenticated = require('../middlewares/isOwnerAuthenticated');
 
+const toTitleCase = (str) => {
+  return str
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+};
+
 router.get('/', isOwnerAuthenticated, async function (req, res) {
   try {
     const categories = await Category.find();
@@ -21,23 +27,29 @@ router.post('/create', isOwnerAuthenticated, async function (req, res) {
     if (!name) {
       return res.status(400).json({ message: 'Missing fields' });
     }
-    const normalizedName = name.trim().toLowerCase();
+
+    const trimmedName = name.trim();
+    const normalizedName = trimmedName.toLowerCase();
+    
     const isExisting = await Category.findOne({
       name: { $regex: new RegExp(`^${normalizedName}$`, 'i') },
     });
+    
     if (isExisting) {
       return res.status(409).json({ message: 'Category already exists' });
     }
 
-    const slug = name.toLowerCase().trim().replace(/\s+/g, '-');
+    const titleCaseName = toTitleCase(trimmedName);
+    const slug = normalizedName.replace(/\s+/g, '-');
 
     const category = new Category({
-      name,
+      name: titleCaseName,
       description,
       slug,
     });
+    
     await category.save();
-    res.status(201).json(category);
+    return res.status(201).json(category);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Server error' });
@@ -75,10 +87,7 @@ router.patch('/edit/:id', isOwnerAuthenticated, async function (req, res) {
         return res.status(409).json({ message: 'Category already exists' });
       }
 
-      category.name = trimmedName
-        .toLowerCase()
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-
+      category.name = toTitleCase(trimmedName);
       category.slug = trimmedName.toLowerCase().replace(/\s+/g, '-');
     }
     if (description !== undefined) {
