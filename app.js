@@ -8,6 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ownersRouter = require('./routes/ownersRouter');
 const productsRouter = require('./routes/productsRouter');
+const categoriesRouter = require('./routes/categoriesRouter');
 
 app.use(
   session({
@@ -37,6 +38,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use('/owners', ownersRouter);
+app.use('/owners/categories', categoriesRouter);
 app.use('/owners/products', productsRouter);
 
 app.get('/', (req, res) => {

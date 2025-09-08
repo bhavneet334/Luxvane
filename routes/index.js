@@ -1,9 +1,9 @@
 const express = require('express');
-const router = reqiure('router');
+const router = require('router');
 
-router.get("/", function(req,res) {
-    let error = req.flash("error");
-    res.render("index", {error});
+router.get('/', function (req, res) {
+  let error = req.flash('error');
+  res.render('index', { error });
 });
 
 // router.get("/shop", isLoggedin, function(req,res){
