@@ -11,7 +11,7 @@ const productsRouter = require('./routes/productsRouter');
 
 app.use(
   session({
-    secret: 'someVerySecretKey', // change this
+    secret: process.env.MY_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
   }),
@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
   res.render('admin/login');
 });
 
-const PORT = 4400 || process.env.port;
+const PORT = process.env.PORT || 4400;
 
 app.listen(PORT, () => {
   console.log('Server up and running', `${PORT}`);
