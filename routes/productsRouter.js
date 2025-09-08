@@ -67,8 +67,6 @@ router.post(
         discount,
       });
 
-      console.log(newProduct);
-
       await newProduct.save();
       req.flash('success', 'Product created successfully');
       res.redirect('/owners/products/create');
@@ -100,32 +98,42 @@ router.get('/:id/edit', isOwnerAuthenticated, async function (req, res) {
 });
 
 //Edit product
-router.post('/:id/update', isOwnerAuthenticated, async function (req, res) {
-  try {
-    const id = req.params.id;
+router.post(
+  '/:id/update',
+  isOwnerAuthenticated,
+  upload.single('uploaded_file'),
+  async function (req, res) {
+    try {
+      const id = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send('Invalid product ID');
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send('Invalid product ID');
+      }
+
+      const { name, price, description, discount } = req.body;
+      const updateData = { name, price, description, discount };
+
+      if (req.file) {
+        const uploadedImage = await uploadToCloudinary(req.file.buffer);
+        updateData.image = uploadedImage.secure_url;
+      }
+
+      const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true,
+      });
+
+      if (!updatedProduct) {
+        return res.status(404).send('Product not found');
+      }
+      req.flash('success', 'Product updated successfully');
+      return res.redirect('/owners/products');
+    } catch (err) {
+      console.error('Error', err.message);
+      return res.status(500).send('Server error');
     }
-
-    const { name, price, image, description, discount } = req.body;
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { name, price, image, description, discount },
-      { new: true, runValidators: true },
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).send('Product not found');
-    }
-    req.flash('success', 'Product updated successfully');
-    return res.redirect('/owners/products');
-  } catch (err) {
-    console.error('Error', err.message);
-    return res.status(500).send('Server error');
-  }
-});
+  },
+);
 
 //Delete product
 router.post('/:id/delete', isOwnerAuthenticated, async function (req, res) {

@@ -33,7 +33,7 @@
                 </a>
             </div>
 
-            <form action="/owners/products/<%= product._id %>/update" method="POST" class="product-form">
+            <form action="/owners/products/<%= product._id %>/update" method="POST" class="product-form" enctype="multipart/form-data">
 
                 <div class="form-row">
                     <label for="name">Name</label>
@@ -43,7 +43,6 @@
                         type="text"
                         placeholder="Product name"
                         value="<%= product.name %>"
-                        required
                     />
                 </div>
 
@@ -56,20 +55,17 @@
                         step="0.01"
                         placeholder="e.g. 49.99"
                         value="<%= product.price %>"
-                        required
                     />
                 </div>
 
                 <div class="form-row">
-                    <label for="image">Image URL</label>
-                    <input
-                        id="image"
-                        name="image"
-                        type="text"
-                        placeholder="https://..."
-                        value="<%= product.image %>"
-                        required
-                    />
+                    <label>Current Image</label>
+                    <img src="<%= product.image%>" alt="Product Image" width="120" />
+                </div> 
+
+                <div class="form-row">
+                    <label for="image">Change image</label>
+                    <input name="uploaded_file" type="file"/>
                 </div>
 
                 <div class="form-row">
