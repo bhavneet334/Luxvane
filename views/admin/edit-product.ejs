@@ -68,6 +68,20 @@
                     <input name="uploaded_file" type="file"/>
                 </div>
 
+                
+                <div class="form-row">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" required>
+                    <option hidden value="">Select one</option>
+
+                    <% categories.forEach(c => { %>
+                        <option value="<%= c._id %>">
+                        <%= c.name %>
+                        </option>
+                    <% }) %>
+                    </select>
+                </div>
+
                 <div class="form-row">
                     <label for="description">Description</label>
                     <textarea

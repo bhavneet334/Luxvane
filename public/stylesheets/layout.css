@@ -1,6 +1,6 @@
 .page-container {
-  max-width: 1000px;
-  margin: 40px auto;
+  flex: 1;
+  margin: 40px;
   padding: 0 20px;
 }
 
