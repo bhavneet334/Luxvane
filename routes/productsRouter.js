@@ -5,6 +5,7 @@ const Product = require('../models/product-model');
 const mongoose = require('mongoose');
 const ownerModel = require('../models/owner-model');
 const multer = require('multer');
+const cloudinary = require('../config/cloudinary');
 
 //List all products
 router.get('/', isOwnerAuthenticated, async function (req, res) {
@@ -18,17 +19,25 @@ router.get('/create', isOwnerAuthenticated, async function (req, res) {
 });
 
 //Create a new product
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueFilename = Date.now() + '_' + file.originalname;
-    cb(null, uniqueFilename);
-  },
-});
-
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'Luxvane/products',
+        use_filename: true,
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      },
+    );
+
+    stream.end(buffer);
+  });
+};
 
 router.post(
   '/create',
@@ -37,9 +46,9 @@ router.post(
   async function (req, res) {
     try {
       const { name, price, description, discount } = req.body;
-      const image = `/uploads/${req.file.filename}`;
+      console.log(req.file);
 
-      if (!name || !price || !image) {
+      if (!name || !price || !req.file) {
         return res.status(400).send('Invalid/missing fields');
       }
 
@@ -48,18 +57,21 @@ router.post(
         return res.status(400).send('Product already exists');
       }
 
+      const uploadResult = await uploadToCloudinary(req.file.buffer);
+
       const newProduct = new Product({
         name,
         price,
-        image,
+        image: uploadResult.secure_url,
         description,
         discount,
       });
 
+      console.log(newProduct);
+
       await newProduct.save();
       req.flash('success', 'Product created successfully');
       res.redirect('/owners/products/create');
-      // return res.redirect('/owners/products');
     } catch (err) {
       return res.status(500).send(err.message);
     }
