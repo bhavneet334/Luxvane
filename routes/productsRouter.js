@@ -96,6 +96,19 @@ router.post(
         return res.redirect('/owners/products/create');
       }
 
+      if (name.trim().length > 200) {
+        req.flash('error', 'Product name must be less than 200 characters.');
+        return res.redirect('/owners/products/create');
+      }
+
+      if (description && description.trim().length > 2000) {
+        req.flash(
+          'error',
+          'Product description must be less than 2000 characters.',
+        );
+        return res.redirect('/owners/products/create');
+      }
+
       if (!mongoose.Types.ObjectId.isValid(category)) {
         req.flash('error', 'Invalid category selected');
         return res.redirect('/owners/products/create');
@@ -188,6 +201,16 @@ router.post(
       }
 
       const { name, price, description, category, discount } = req.body;
+
+      if (name !== undefined && name.trim().length > 200) {
+        req.flash('error', 'Product name must be less than 200 characters');
+        return res.redirect(`/owners/products/${id}/edit`);
+      }
+
+      if (description !== undefined && description.length > 2000) {
+        req.flash('error', 'Description must be less than 2000 characters');
+        return res.redirect(`/owners/products/${id}/edit`);
+      }
 
       if (name !== undefined) {
         const trimmedName = name.trim();
