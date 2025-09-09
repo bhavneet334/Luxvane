@@ -18,7 +18,11 @@ const productSchema = new Schema(
       required: true,
     },
     description: String,
-    discount: Number,
+    discount: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
     category: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
