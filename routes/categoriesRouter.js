@@ -3,11 +3,10 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Category = require('../models/category-model');
 const isOwnerAuthenticated = require('../middlewares/isOwnerAuthenticated');
+const logger = require('../utils/logger');
 
 const toTitleCase = (str) => {
-  return str
-    .toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 };
 
 router.get('/', isOwnerAuthenticated, async function (req, res) {
@@ -15,7 +14,7 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
     const categories = await Category.find();
     return res.status(200).json(categories);
   } catch (err) {
-    console.error(err);
+    logger.error('Error fetching categories:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
@@ -30,11 +29,11 @@ router.post('/create', isOwnerAuthenticated, async function (req, res) {
 
     const trimmedName = name.trim();
     const normalizedName = trimmedName.toLowerCase();
-    
+
     const isExisting = await Category.findOne({
       name: { $regex: new RegExp(`^${normalizedName}$`, 'i') },
     });
-    
+
     if (isExisting) {
       return res.status(409).json({ message: 'Category already exists' });
     }
@@ -47,11 +46,11 @@ router.post('/create', isOwnerAuthenticated, async function (req, res) {
       description,
       slug,
     });
-    
+
     await category.save();
     return res.status(201).json(category);
   } catch (err) {
-    console.error(err);
+    logger.error('Error creating categories', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
@@ -99,7 +98,7 @@ router.patch('/edit/:id', isOwnerAuthenticated, async function (req, res) {
     await category.save();
     return res.status(200).json({ message: 'Category updated', category });
   } catch (err) {
-    console.error(err);
+    logger.error('Cannot edit category', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });

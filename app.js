@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const ownersRouter = require('./routes/ownersRouter');
 const productsRouter = require('./routes/productsRouter');
 const categoriesRouter = require('./routes/categoriesRouter');
+const logger = require('./utils/logger');
 
 app.use(
   session({
@@ -48,5 +49,5 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 4400;
 
 app.listen(PORT, () => {
-  console.log('Server up and running', `${PORT}`);
+  logger.info(`Server up and running on ${PORT}`);
 });

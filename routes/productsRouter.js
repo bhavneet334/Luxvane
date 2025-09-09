@@ -7,6 +7,7 @@ const ownerModel = require('../models/owner-model');
 const Category = require('../models/category-model');
 const multer = require('multer');
 const cloudinary = require('../config/cloudinary');
+const logger = require('../utils/logger');
 
 //List all products, and optionally filter by categories
 router.get('/', isOwnerAuthenticated, async function (req, res) {
@@ -35,6 +36,7 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
     });
   } catch (err) {
     req.flash('error', 'Failed to load products');
+    logger.error('Error loading products', err);
     return res.redirect('/owners/products');
   }
 });
@@ -118,7 +120,9 @@ router.post(
       req.flash('success', 'Product created successfully');
       res.redirect('/owners/products/create');
     } catch (err) {
-      return res.status(500).send(err.message);
+      logger.error('Error creating product:', err);
+      req.flash('error', 'Failed to create product');
+      return res.redirect('/owners/products/create');
     }
   },
 );
@@ -130,18 +134,21 @@ router.get('/:id/edit', isOwnerAuthenticated, async function (req, res) {
     const categories = await Category.find();
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send('Invalid product ID');
+      req.flash('error', 'Invalid product ID');
+      return res.redirect('/owners/products');
     }
 
     const product = await Product.findById(id);
     if (!product) {
-      return res.status(404).send('Product does not exist');
+      req.flash('error', 'Product does not exist');
+      return res.redirect('/owners/products');
     }
 
     res.render('admin/edit-product', { product, owner: req.owner, categories });
   } catch (err) {
-    console.error('Cannot get edit', err);
-    return res.status(500).send('Internal server error');
+    logger.error('Error loading edit product form:', err);
+    req.flash('error', 'Failed to load product');
+    return res.redirect('/owners/products');
   }
 });
 
@@ -216,8 +223,9 @@ router.post(
       req.flash('success', 'Product updated successfully');
       return res.redirect('/owners/products');
     } catch (err) {
-      console.error('Error', err.message);
-      return res.status(500).send('Server error');
+      logger.error('Error updating product:', err);
+      req.flash('error', 'Failed to update product');
+      return res.redirect(`/owners/products/${id}/edit`);
     }
   },
 );
@@ -227,7 +235,8 @@ router.post('/:id/delete', isOwnerAuthenticated, async function (req, res) {
   try {
     const id = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send('Invalid product id');
+      req.flash('error', 'Invalid product ID');
+      return res.redirect('/owners/products');
     }
 
     const deletedProduct = await Product.findByIdAndDelete(id);
@@ -240,8 +249,9 @@ router.post('/:id/delete', isOwnerAuthenticated, async function (req, res) {
     req.flash('success', 'Product deleted successfully');
     return res.redirect('/owners/products');
   } catch (err) {
-    console.error('Error', err.message);
-    return res.status(500).send('Internal server error');
+    logger.error('Error deleting product:', err);
+    req.flash('error', 'Failed to delete product');
+    return res.redirect('/owners/products');
   }
 });
 
@@ -251,18 +261,21 @@ router.get('/:id', isOwnerAuthenticated, async function (req, res) {
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send('Invalid product ID');
+      req.flash('error', 'Invalid product ID');
+      return res.redirect('/owners/products');
     }
 
     const product = await Product.findById(id);
     if (!product) {
-      return res.status(404).send('Product does not exist');
+      req.flash('error', 'Product does not exist');
+      return res.redirect('/owners/products');
     }
 
     res.render('product-details', { product });
   } catch (err) {
-    console.error('Product route error', err);
-    return res.status(500).send('Internal server error');
+    logger.error('Error viewing product:', err);
+    req.flash('error', 'Failed to load product');
+    return res.redirect('/owners/products');
   }
 });
 
