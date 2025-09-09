@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics - Luxvane Admin</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" />
+    <link rel="stylesheet" href="/stylesheets/header.css" />
+    <link rel="stylesheet" href="/stylesheets/products.css">
+    <link rel="stylesheet" href="/stylesheets/analytics.css" />
+
+  </head>
+  <body>
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <div class="sidebar-header"></div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <a href="/owners/dashboard" class="nav-item">
+              <span class="nav-icon">📊</span>
+              <span class="nav-label">Dashboard</span>
+            </a>
+
+            <a href="/owners/products" class="nav-item">
+              <span class="nav-icon">📦</span>
+              <span class="nav-label">All Products</span>
+            </a>
+
+            <a href="/owners/analytics" class="nav-item active">
+              <span class="nav-icon">📈</span>
+              <span class="nav-label">Analytics</span>
+            </a>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="admin-main">
+        <%- include('../partials/header.ejs') %>
+
+        <main class="page-container analytics-page">
+
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <h2 class="stat-card-title">Total Products</h2>
+              <p class="stat-card-value"><%= stats.totalProducts %></p>
+            </div>
+            <div class="stat-card">
+              <h2 class="stat-card-title">Total Categories</h2>
+              <p class="stat-card-value"><%= stats.totalCategories %></p>
+            </div>
+            <div class="stat-card">
+              <h2 class="stat-card-title">Recent Products</h2>
+              <p class="stat-card-value"><%= stats.recentProducts %></p>
+            </div>
+            <div class="stat-card">
+              <h2 class="stat-card-title">Products with Discounts</h2>
+              <p class="stat-card-value"><%= stats.discountedProducts %></p>
+            </div>
+
+          </div>
+
+          <div class="category-section">
+            <h2 class="category-section-title">Products By Category</h2>
+            <div class="category-grid">
+                <% chartData.productsByCategory.forEach(item => { %>
+                    <div class="category-card">
+                        <h2 class="category-card-name"><%= item.name %></h2>
+                        <h2 class="category-card-count"><%= item.count %> products</h2>
+                    </div>
+                <% }); %>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

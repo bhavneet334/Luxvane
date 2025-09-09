@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const ownersRouter = require('./routes/ownersRouter');
 const productsRouter = require('./routes/productsRouter');
 const categoriesRouter = require('./routes/categoriesRouter');
+const analyticsRouter = require('./routes/analyticsRouter');
 const logger = require('./utils/logger');
 
 app.use(
@@ -41,6 +42,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/owners', ownersRouter);
 app.use('/owners/categories', categoriesRouter);
 app.use('/owners/products', productsRouter);
+app.use('/owners/analytics', analyticsRouter);
 
 app.get('/', (req, res) => {
   res.render('admin/login');
