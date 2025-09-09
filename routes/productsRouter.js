@@ -180,6 +180,17 @@ router.post(
           req.flash('error', 'Product name cannot be empty');
           return res.redirect(`/owners/products/${id}/edit`);
         }
+
+        const duplicate = await Product.findOne({
+          _id: { $ne: id },
+          name: { $regex: new RegExp(`^${trimmedName}$`, 'i') },
+        });
+
+        if (duplicate) {
+          req.flash('error', 'Product with this name already exists');
+          return res.redirect(`/owners/products/${id}/edit`);
+        }
+
         product.name = trimmedName;
       }
 
