@@ -49,7 +49,22 @@ router.get('/create', isOwnerAuthenticated, async function (req, res) {
 
 //Create a new product
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed.'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});
 
 const uploadToCloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
