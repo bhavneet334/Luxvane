@@ -32,17 +32,29 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
         count: count,
       };
     });
-    res.render('admin/analytics',{
-        owner : req.owner,
-        stats : {
-            totalProducts,
-            totalCategories,
-            recentProducts,
-            discountedProducts,
-        }, 
-        chartData : {
-            productsByCategory
-        }
+
+    const priceRanges = {
+      '0-50': products.filter((p) => p.price >= 0 && p.price <= 50).length,
+      '51-100': products.filter((p) => p.price >= 51 && p.price <= 100).length,
+      '101-200': products.filter((p) => p.price >= 101 && p.price <= 200)
+        .length,
+      '201-500': products.filter((p) => p.price >= 201 && p.price <= 500)
+        .length,
+      '501+': products.filter((p) => p.price > 500).length,
+    };
+
+    res.render('admin/analytics', {
+      owner: req.owner,
+      stats: {
+        totalProducts,
+        totalCategories,
+        recentProducts,
+        discountedProducts,
+      },
+      chartData: {
+        productsByCategory,
+        priceRanges,
+      },
     });
   } catch (err) {
     logger.error('Error loading analytics', err);

@@ -62,13 +62,17 @@
             <div class="chart-container">
               <canvas id="productsByCategoryChart"></canvas>
             </div>
+            <h2 class="category-section-title">Price Distribution</h2>
+            <div class="chart-container">
+              <canvas id="priceRangeChart"></canvas>
+            </div>
           </div>
         </main>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      const productsByCategory = <%- JSON.stringify(chartData.productsByCategory); %>;
+      const productsByCategory = <%- JSON.stringify(chartData.productsByCategory) %>;
 
       const labels = productsByCategory.map(item => item.name);
       const data = productsByCategory.map(item => item.count);
@@ -82,13 +86,13 @@
           datasets: [{
             data: data,
             backgroundColor: [
-            '#A78BFA',  // Light purple
-            '#60A5FA',  // Light blue
-            '#34D399',  // Light green
-            '#FBBF24',  // Light amber
-            '#F87171',  // Light red
-            '#818CF8',  // Light indigo
-            '#FB7185'   // Light pink
+            '#A78BFA',
+            '#60A5FA',
+            '#34D399',
+            '#FBBF24',
+            '#F87171',
+            '#818CF8',
+            '#FB7185'
             ]
           }]
           },
@@ -97,6 +101,39 @@
           maintainAspectRatio: false
           }
       });
+
+      const priceRanges = <%- JSON.stringify(chartData.priceRanges) %> ;
+
+      const priceLabels = Object.keys(priceRanges);
+      const priceData = Object.values(priceRanges);
+
+      const priceCtx = document.getElementById('priceRangeChart').getContext('2d');
+
+      new Chart(priceCtx, {
+        type : 'bar',
+        data : {
+            labels : priceLabels,
+            datasets : [{
+                label : 'Number of products',
+                data : priceData,
+                backgroundColor : '#6366F1',
+                borderColor: '#4F46E5',
+                borderWidth: 1
+            }]
+        },
+        options : {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales : {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+            }
+          }
+      })
     </script>
   </body>
 </html>
