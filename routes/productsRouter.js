@@ -8,6 +8,7 @@ const Category = require('../models/category-model');
 const multer = require('multer');
 const cloudinary = require('../config/cloudinary');
 const logger = require('../utils/logger');
+const { generateProductDescriptions } = require('../utils/generateAIDescriptions');
 
 //List all products, and optionally filter by categories
 router.get('/', isOwnerAuthenticated, async function (req, res) {
@@ -82,6 +83,119 @@ const uploadToCloudinary = (buffer) => {
     stream.end(buffer);
   });
 };
+
+router.post(
+  '/generate-description',
+  isOwnerAuthenticated,
+  upload.single('uploaded_file'),
+  async function (req, res) {
+    try {
+      if (!req.body) {
+        req.flash('error', 'Invalid request data');
+        return res.redirect('/owners/products/create');
+      }
+
+      const name = req.body.name ? req.body.name.trim() : '';
+      const price = req.body.price ? String(req.body.price).trim() : '';
+      const category = req.body.category ? String(req.body.category).trim() : '';
+      const discount = req.body.discount ? String(req.body.discount).trim() : '';
+      const imageUrl = req.body.imageUrl ? req.body.imageUrl.trim() : '';
+      const productId = req.body.productId ? String(req.body.productId).trim() : '';
+
+      if (!name || !price || !category) {
+        req.flash('error', 'Name, price, and category are required');
+        const redirectPath = productId
+          ? `/owners/products/${productId}/edit`
+          : '/owners/products/create';
+        return res.redirect(redirectPath);
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(category)) {
+        req.flash('error', 'Invalid category selected');
+        const redirectPath = productId
+          ? `/owners/products/${productId}/edit`
+          : '/owners/products/create';
+        return res.redirect(redirectPath);
+      }
+
+      const categoryDoc = await Category.findById(category);
+      if (!categoryDoc) {
+        req.flash('error', 'Category not found');
+        const redirectPath = productId
+          ? `/owners/products/${productId}/edit`
+          : '/owners/products/create';
+        return res.redirect(redirectPath);
+      }
+
+      let finalImageUrl = imageUrl;
+
+      if (req.file) {
+        const uploadResult = await uploadToCloudinary(req.file.buffer);
+        finalImageUrl = uploadResult.secure_url;
+      }
+
+      if (!finalImageUrl) {
+        req.flash('error', 'Image is required for AI description generation');
+        const redirectPath = productId
+          ? `/owners/products/${productId}/edit`
+          : '/owners/products/create';
+        return res.redirect(redirectPath);
+      }
+
+      const description = await generateProductDescriptions({
+        imageUrl: finalImageUrl,
+        name: name,
+        price: Number(price),
+        categoryName: categoryDoc.name,
+        discount: discount ? Number(discount) : undefined,
+      });
+
+      const categories = await Category.find();
+      const isEdit = productId ? true : false;
+
+      if (isEdit) {
+        const product = await Product.findById(productId);
+        if (!product) {
+          req.flash('error', 'Product not found');
+          return res.redirect('/owners/products');
+        }
+
+        res.render('admin/edit-product', {
+          owner: req.owner,
+          categories,
+          product,
+          generatedDescription: description,
+          formData: {
+            name: name,
+            price: price,
+            category: category,
+            discount: discount || '',
+          },
+        });
+      } else {
+        res.render('admin/create-product', {
+          owner: req.owner,
+          categories,
+          generatedDescription: description,
+          formData: {
+            name: name,
+            price: price,
+            category: category,
+            discount: discount || '',
+          },
+        });
+      }
+    } catch (err) {
+      logger.error('Error generating AI description:', err);
+      req.flash('error', 'Failed to generate description');
+      const productId = req.body && req.body.productId ? req.body.productId : null;
+      const redirectPath = productId
+        ? `/owners/products/${productId}/edit`
+        : '/owners/products/create';
+      return res.redirect(redirectPath);
+    }
+  },
+);
 
 router.post(
   '/create',

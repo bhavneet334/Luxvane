@@ -35,6 +35,9 @@
 
             <form action="/owners/products/<%= product._id %>/update" method="POST" class="product-form" enctype="multipart/form-data">
 
+                <input type="hidden" name="productId" value="<%= product._id %>" />
+                <input type="hidden" name="imageUrl" value="<%= product.image %>" />
+
                 <div class="form-row">
                     <label for="name">Name</label>
                     <input
@@ -43,7 +46,7 @@
                         type="text"
                         placeholder="Product name"
                         maxlength="200"
-                        value="<%= product.name %>"
+                        value="<%= typeof formData !== 'undefined' && formData ? formData.name : product.name %>"
                     />
                 </div>
 
@@ -55,7 +58,7 @@
                         type="number"
                         step="0.01"
                         placeholder="e.g. 49.99"
-                        value="<%= product.price %>"
+                        value="<%= typeof formData !== 'undefined' && formData ? formData.price : product.price %>"
                     />
                 </div>
 
@@ -76,7 +79,8 @@
                     <option hidden value="">Select one</option>
 
                     <% categories.forEach(c => { %>
-                        <option value="<%= c._id %>">
+                        <option value="<%= c._id %>"
+                                <%= (product.category.toString() === c._id.toString() || (typeof formData !== 'undefined' && formData && formData.category === c._id.toString())) ? 'selected' : '' %>>
                         <%= c.name %>
                         </option>
                     <% }) %>
@@ -84,14 +88,19 @@
                 </div>
 
                 <div class="form-row">
-                    <label for="description">Description</label>
+                    <label for="description">
+                        Description
+                        <button type="submit" formaction="/owners/products/generate-description" formmethod="POST" class="btn-ai-generate">
+                            ✨ Generate with AI
+                        </button>
+                    </label>
                     <textarea
                         id="description"
                         name="description"
                         rows="3"
                         maxlength="2000"
                         placeholder="Description"
-                    ><%= product.description %></textarea>
+                    ><%= typeof generatedDescription !== 'undefined' ? generatedDescription : (typeof formData !== 'undefined' && formData && formData.description ? formData.description : (product.description || '')) %></textarea>
                 </div>
 
                 <div class="form-row">
@@ -102,7 +111,7 @@
                         type="number"
                         min="0"
                         placeholder="Optional"
-                        value="<%= product.discount %>"
+                        value="<%= typeof formData !== 'undefined' && formData ? formData.discount : (product.discount || '') %>"
                     />
                 </div>
 
