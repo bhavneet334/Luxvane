@@ -71,6 +71,16 @@
   margin-top: 10px;
 }
 
+.chart-container {
+  height: 350px;
+  margin-bottom: 30px;
+}
+
+#productsByCategoryChart {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
 @media (max-width: 900px) {
   .stats-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
