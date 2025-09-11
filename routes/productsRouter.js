@@ -15,19 +15,26 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
   try {
     const { category } = req.query;
 
-    const categories = await Category.find();
-    let products;
-
-    if (category) {
-      if (!mongoose.Types.ObjectId.isValid(category)) {
+    if (category && !mongoose.Types.ObjectId.isValid(category)) {
         req.flash('error', 'Invalid category');
         return res.redirect('/owners/products');
-      }
-
-      products = await Product.find({ category }).populate('category');
-    } else {
-      products = await Product.find().populate('category');
     }
+
+    let categoryExists = null;
+    if (category) {
+      categoryExists = await Category.findById(category);
+      if (!categoryExists) {
+        req.flash('error', 'Category not found');
+        return res.redirect('/owners/products');
+      }
+    }
+
+    const [categories, products] = await Promise.all([
+      Category.find().lean(),
+      category
+      ?Product.find({category}).populate('category')
+      :Product.find().populate('category','name').lean()
+    ]);
 
     res.render('admin/products', {
       products,

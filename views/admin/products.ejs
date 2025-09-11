@@ -90,8 +90,12 @@
           <div class="products-grid">
             <% products.forEach(p => { %>
               <div class="product-card">
-
-                <img src="<%= p.image %>" class="product-img" loading="lazy"/>
+                
+                 <img src="<%= p.image.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/') %>" 
+                    class="product-img" 
+                    loading="lazy"
+                    decoding="async"
+                    alt="<%= p.name %>" />
 
                 <h2 class="product-name"><%= p.name %></h2>
 
