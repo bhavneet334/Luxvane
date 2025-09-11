@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/stylesheets/layout.css">
     <link rel="stylesheet" href="/stylesheets/products.css">
     <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/modal.css">
   </head>
   <body>
 
@@ -120,13 +121,16 @@
                   <form
                     action="/owners/products/<%= p._id %>/delete"
                     method="POST"
+                    class="delete-form"
+                    data-item-name="<%= p.name %>"
+                    data-entity-type="Product"
                   >
-                    <button type="submit" class="btn btn-danger">
+                    <button type="button" class="btn btn-danger delete-btn">
                       Delete
                     </button>
                   </form>
-                </div>
 
+                </div>
               </div>
             <% }) %>
           </div>
@@ -134,6 +138,10 @@
         </main>
       </div>
     </div>
+
+    <%- include('../partials/delete-modal.ejs') %>
+
+    <script src="/javascripts/delete-modal.js"></script>
 
   </body>
 </html>
