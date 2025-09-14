@@ -13,11 +13,12 @@ const { generateProductDescriptions } = require('../utils/generateAIDescriptions
 //List all products, and optionally filter by categories
 router.get('/', isOwnerAuthenticated, async function (req, res) {
   try {
-    const { category } = req.query;
+    const { category, search } = req.query;
+    const searchQuery = search ? search.trim() : '';
 
     if (category && !mongoose.Types.ObjectId.isValid(category)) {
-        req.flash('error', 'Invalid category');
-        return res.redirect('/owners/products');
+      req.flash('error', 'Invalid category');
+      return res.redirect('/owners/products');
     }
 
     let categoryExists = null;
@@ -29,17 +30,29 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
       }
     }
 
+    let productQuery = {};
+
+    if(category){
+      productQuery.category = category;
+    }
+
+    if(searchQuery){
+      productQuery.$or = [
+        {name : { $regex : searchQuery, $options : 'i' }},
+        {description : { $regex : searchQuery, $options : 'i' }}
+      ];
+    }
+
     const [categories, products] = await Promise.all([
       Category.find().lean(),
-      category
-      ?Product.find({category}).populate('category')
-      :Product.find().populate('category','name').lean()
+      Product.find(productQuery).populate('category', 'name').lean(),
     ]);
 
     res.render('admin/products', {
       products,
       categories,
       selectedCategory: category || null,
+      searchQuery:searchQuery || null,
       owner: req.owner,
     });
   } catch (err) {
@@ -104,10 +117,16 @@ router.post(
 
       const name = req.body.name ? req.body.name.trim() : '';
       const price = req.body.price ? String(req.body.price).trim() : '';
-      const category = req.body.category ? String(req.body.category).trim() : '';
-      const discount = req.body.discount ? String(req.body.discount).trim() : '';
+      const category = req.body.category
+        ? String(req.body.category).trim()
+        : '';
+      const discount = req.body.discount
+        ? String(req.body.discount).trim()
+        : '';
       const imageUrl = req.body.imageUrl ? req.body.imageUrl.trim() : '';
-      const productId = req.body.productId ? String(req.body.productId).trim() : '';
+      const productId = req.body.productId
+        ? String(req.body.productId).trim()
+        : '';
 
       if (!name || !price || !category) {
         req.flash('error', 'Name, price, and category are required');
@@ -195,7 +214,8 @@ router.post(
     } catch (err) {
       logger.error('Error generating AI description:', err);
       req.flash('error', 'Failed to generate description');
-      const productId = req.body && req.body.productId ? req.body.productId : null;
+      const productId =
+        req.body && req.body.productId ? req.body.productId : null;
       const redirectPath = productId
         ? `/owners/products/${productId}/edit`
         : '/owners/products/create';

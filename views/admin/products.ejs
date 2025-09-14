@@ -87,6 +87,26 @@
 
         <!-- PAGE CONTENT -->
         <main class="page-container product-page">
+
+          <div class="search-container">
+            <form method="GET" action="/owners/products" class="search-form">
+              <input type="text" name="search" class="search-input" placeholder="Search products by name or description"
+              value="<%= searchQuery || '' %>" autocomplete="off"/>
+              <% if(selectedCategory) { %>
+                <input type="hidden" name="category" value="<%= selectedCategory %>"/>
+              <% } %>
+              <button type="submit" class="search-btn">Search</button>
+              <% if(searchQuery) { %>
+                <a href="/owners/products<%= selectedCategory ? '?category=' + selectedCategory : '' %>" class="search-clear">Clear</a>
+              <% } %>
+            </form>
+          </div>
+
+          <% if (searchQuery) { %>
+            <div class="search-results-info">
+              <p> Search results for "<strong><%= searchQuery %></strong>" (<%= products.length %> found) </p> 
+            </div>
+          <% } %>
           
           <div class="products-grid">
             <% products.forEach(p => { %>
