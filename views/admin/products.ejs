@@ -88,18 +88,42 @@
         <!-- PAGE CONTENT -->
         <main class="page-container product-page">
 
-          <div class="search-container">
-            <form method="GET" action="/owners/products" class="search-form">
-              <input type="text" name="search" class="search-input" placeholder="Search products by name or description"
-              value="<%= searchQuery || '' %>" autocomplete="off"/>
-              <% if(selectedCategory) { %>
-                <input type="hidden" name="category" value="<%= selectedCategory %>"/>
-              <% } %>
-              <button type="submit" class="search-btn">Search</button>
+          <div class="sort-search-wrapper">
+            <div class="search-container">
+              <form method="GET" action="/owners/products" class="search-form">
+                <input type="text" name="search" class="search-input" placeholder="Search products by name or description"
+                value="<%= searchQuery || '' %>" autocomplete="off"/>
+                <% if(selectedCategory) { %>
+                  <input type="hidden" name="category" value="<%= selectedCategory %>"/>
+                <% } %>
+                <button type="submit" class="search-btn">Search</button>
               <% if(searchQuery) { %>
-                <a href="/owners/products<%= selectedCategory ? '?category=' + selectedCategory : '' %>" class="search-clear">Clear</a>
+                <a href="/owners/products<%= selectedCategory ? '?category=' + selectedCategory : '' %><%= selectedCategory && selectedSort ? '&sort=' + selectedSort : (selectedSort ? '?sort=' + selectedSort : '') %>" class="search-clear">Clear</a>
               <% } %>
-            </form>
+              </form>
+            </div>
+
+            <div class="sort-container">
+              <form method="GET" action="/owners/products" class="sort-form">
+                <% if(selectedCategory) { %>
+                  <input type="hidden" name="category" value="<%= selectedCategory %>"/>
+                <% } %>
+
+                <% if(searchQuery) { %>
+                  <input type="hidden" name="search" value="<%= searchQuery %>">
+                <% } %>
+
+                <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+                  <option value="" <%= !selectedSort ? 'selected' : '' %>>Sort by:</option>
+                  <option value="name-asc" <%= selectedSort === 'name-asc' ? 'selected' : '' %>>Name (A-Z)</option>
+                  <option value="name-desc" <%= selectedSort === 'name-desc' ? 'selected' : '' %>>Name (Z-A)</option>
+                  <option value="price-asc" <%= selectedSort === 'price-asc' ? 'selected' : '' %>>Price (Low to High)</option>
+                  <option value="price-desc" <%= selectedSort === 'price-desc' ? 'selected' : '' %>>Price (High to Low)</option>
+                  <option value="date-asc" <%= selectedSort === 'date-asc' ? 'selected' : '' %>>Date (Oldest First)</option>
+                  <option value="date-desc" <%= selectedSort === 'date-desc' ? 'selected' : '' %>>Date (Newest First)</option>
+                </select>
+              </form>
+            </div>
           </div>
 
           <% if (searchQuery) { %>

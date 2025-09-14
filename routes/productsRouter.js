@@ -13,7 +13,7 @@ const { generateProductDescriptions } = require('../utils/generateAIDescriptions
 //List all products, and optionally filter by categories
 router.get('/', isOwnerAuthenticated, async function (req, res) {
   try {
-    const { category, search } = req.query;
+    const { category, search, sort } = req.query;
     const searchQuery = search ? search.trim() : '';
 
     if (category && !mongoose.Types.ObjectId.isValid(category)) {
@@ -43,9 +43,20 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
       ];
     }
 
+    const SORT_MAP = {
+      'name-asc' : {name : 1}, 
+      'name-desc' : {name : -1},
+      'price-asc' : {price : 1},
+      'price-desc' : {price : -1},
+      'date-asc' : {createdAt : 1},
+      'date-desc' : {createdAt : -1}
+    }
+
+    const sortOption = sort && SORT_MAP[sort] ? SORT_MAP[sort] : {};
+
     const [categories, products] = await Promise.all([
       Category.find().lean(),
-      Product.find(productQuery).populate('category', 'name').lean(),
+      Product.find(productQuery).sort(sortOption).populate('category', 'name').lean(),
     ]);
 
     res.render('admin/products', {
@@ -53,6 +64,7 @@ router.get('/', isOwnerAuthenticated, async function (req, res) {
       categories,
       selectedCategory: category || null,
       searchQuery:searchQuery || null,
+      selectedSort: sort || null,
       owner: req.owner,
     });
   } catch (err) {
