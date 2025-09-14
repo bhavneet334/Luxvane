@@ -111,45 +111,54 @@
           <div class="products-grid">
             <% products.forEach(p => { %>
               <div class="product-card">
+                <img src="<%= p.image.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/') %>" 
+                     class="product-img" 
+                     loading="lazy"
+                     decoding="async"
+                     alt="<%= p.name %>" />
                 
-                 <img src="<%= p.image.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/') %>" 
-                    class="product-img" 
-                    loading="lazy"
-                    decoding="async"
-                    alt="<%= p.name %>" />
+                <div class="product-card-content">
+                  <h2 class="product-name"><%= p.name %></h2>
 
-                <h2 class="product-name"><%= p.name %></h2>
+                  <div class="product-price">
+                    <% if (p.discount && p.discount > 0) { %>
+                      <span class="product-original-price">$<%= p.price %></span>
+                      <span>$<%= (p.price * (1 - p.discount / 100)).toFixed(2) %></span>
+                    <% } else { %>
+                      <span>$<%= p.price %></span>
+                    <% } %>
+                  </div>
 
-                <p class="product-price"><%= p.price %>$</p>
+                  <% if (p.discount && p.discount > 0) { %>
+                    <span class="product-discount">
+                      <%= p.discount %>% OFF
+                    </span>
+                  <% } %>
 
-                <p class="product-desc"><%= p.description %></p>
+                  <% if (p.description) { %>
+                    <p class="product-desc"><%= p.description %></p>
+                  <% } %>
 
-                <% if (p.discount && p.discount > 0) { %>
-                  <p class="product-discount">
-                    Discount: <%= p.discount %>%
-                  </p>
-                <% } %>
+                  <div class="product-actions">
+                    <a
+                      href="/owners/products/<%= p._id %>/edit"
+                      class="btn btn-outline"
+                    >
+                      Edit
+                    </a>
 
-                <div class="product-actions">
-                  <a
-                    href="/owners/products/<%= p._id %>/edit"
-                    class="btn btn-outline"
-                  >
-                    Edit
-                  </a>
-
-                  <form
-                    action="/owners/products/<%= p._id %>/delete"
-                    method="POST"
-                    class="delete-form"
-                    data-item-name="<%= p.name %>"
-                    data-entity-type="Product"
-                  >
-                    <button type="button" class="btn btn-danger delete-btn">
-                      Delete
-                    </button>
-                  </form>
-
+                    <form
+                      action="/owners/products/<%= p._id %>/delete"
+                      method="POST"
+                      class="delete-form"
+                      data-item-name="<%= p.name %>"
+                      data-entity-type="Product"
+                    >
+                      <button type="button" class="btn btn-danger delete-btn">
+                        Delete
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </div>
             <% }) %>
