@@ -58,3 +58,41 @@
 .btn-danger:hover {
   background: #fee2e2;
 }
+
+.flash {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideInDown 0.3s ease;
+  max-width: 400px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.flash-success {
+  background: #10b981;
+  color: white;
+  border-left: 4px solid #059669;
+}
+
+.flash-error {
+  background: #f54040;
+  color: white;
+  border-left: 4px solid #dc2626;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
