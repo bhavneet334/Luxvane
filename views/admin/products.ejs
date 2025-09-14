@@ -113,7 +113,7 @@
                   <input type="hidden" name="search" value="<%= searchQuery %>">
                 <% } %>
 
-                <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()">
+                <select name="sort" id="sort" class="sort-select" onchange="this.form.submit()" aria-label="Sort products by">
                   <option value="" <%= !selectedSort ? 'selected' : '' %>>Sort by:</option>
                   <option value="name-asc" <%= selectedSort === 'name-asc' ? 'selected' : '' %>>Name (A-Z)</option>
                   <option value="name-desc" <%= selectedSort === 'name-desc' ? 'selected' : '' %>>Name (Z-A)</option>
