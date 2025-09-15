@@ -45,8 +45,17 @@ router.get('/login', function (req, res) {
 
 //logout route
 router.get('/logout', function (req, res) {
-  res.clearCookie('token');
-  return res.redirect('/owners/login');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+  req.session.destroy((err) => {
+    if (err) {
+      logger.error('Error destroying session:', err);
+    }
+    return res.redirect('/owners/login');
+  });
 });
 
 //on login, the form data should be validated and if it is the correct owner then can login
@@ -66,8 +75,8 @@ router.post('/login', async function (req, res) {
   const token = generateToken(owner);
   res.cookie('token', token, {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 2 * 60 * 60 * 1000, // cookies should also expire when token expires
   });
   return res.redirect('/owners/dashboard');

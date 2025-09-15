@@ -13,12 +13,20 @@ const analyticsRouter = require('./routes/analyticsRouter');
 const logger = require('./utils/logger');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 app.use(
   session({
     secret: process.env.MY_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'strict',
+    },
   }),
 );
 
@@ -32,6 +40,18 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
+app.use(helmet());
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP. Please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/owners', apiLimiter);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
