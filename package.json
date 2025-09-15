@@ -19,21 +19,38 @@
   "name": "luxvane",
   "version": "1.0.0",
   "main": "app.js",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bhavneet334/Luxane.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ecommerce",
+    "express",
+    "nodejs",
+    "mongodb",
+    "jwt",
+    "ai",
+    "gemini",
+    "cloudinary",
+    "winston",
+    "logging"
+  ],
+  "author": "Bhavneet Kaur",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/bhavneet334/Luxane/issues"
   },
   "homepage": "https://github.com/bhavneet334/Luxane#readme",
-  "description": "",
+  "description": "Full-stack e-commerce admin panel with server-side rendering, AI powered product management, JWT authentication, and MongoDB integration.",
   "devDependencies": {
     "prettier": "^3.6.2"
   }
