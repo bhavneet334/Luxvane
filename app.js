@@ -11,6 +11,8 @@ const productsRouter = require('./routes/productsRouter');
 const categoriesRouter = require('./routes/categoriesRouter');
 const analyticsRouter = require('./routes/analyticsRouter');
 const logger = require('./utils/logger');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 app.use(
   session({
@@ -38,6 +40,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/owners', ownersRouter);
 app.use('/owners/categories', categoriesRouter);

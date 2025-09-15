@@ -2,14 +2,34 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   const token = req.cookies.token;
+
+  const isApiRequest =
+    req.headers.accept?.includes('application/json') ||
+    req.path.startsWith('/owners/categories') ||
+    req.path.startsWith('/owners/products') ||
+    req.path.startsWith('/owners/analytics');
+
   if (!token) {
+    if (isApiRequest) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Authentication token required',
+      });
+    }
     return res.redirect('/owners/login');
   }
+
   try {
     const data = jwt.verify(token, process.env.JWT_KEY);
     req.owner = data;
     next();
   } catch (err) {
+    if (isApiRequest) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Invalid or expired token',
+      });
+    }
     return res.redirect('/owners/login');
   }
 };
