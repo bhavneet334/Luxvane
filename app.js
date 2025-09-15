@@ -3,7 +3,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const path = require('path');
 require('dotenv').config();
-require('./config/mongoose-connection');
+const mongoose = require('./config/mongoose-connection');
 const session = require('express-session');
 const flash = require('connect-flash');
 const ownersRouter = require('./routes/ownersRouter');
@@ -32,7 +32,6 @@ app.use(
 
 app.use(flash());
 
-// Make flash messages available in all views
 app.use(function (req, res, next) {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -62,6 +61,40 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get('/health', (req, res) => {
+  return res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
+});
+
+app.get('/ready', (req, res) => {
+  const dbState = mongoose.connection.readyState;
+
+  const stateNameByCode = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+  };
+
+  const dbStateName = stateNameByCode[dbState] || 'unknown';
+  const isReady = dbState === 1;
+
+  const payload = {
+    status: isReady ? 'ok' : 'not_ready',
+    timestamp: new Date().toISOString(),
+    uptimeSeconds: Math.floor(process.uptime()),
+    database: {
+      status: dbStateName,
+      readyState: dbState,
+    },
+  };
+
+  return res.status(isReady ? 200 : 503).json(payload);
+});
 
 app.use('/owners', ownersRouter);
 app.use('/owners/categories', categoriesRouter);
