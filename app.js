@@ -48,6 +48,11 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         imgSrc: ["'self'", 'https://res.cloudinary.com', 'data:'],
+        scriptSrc: [
+          "'self'",
+          'https://cdn.jsdelivr.net',
+          "'unsafe-inline'",
+        ],
         scriptSrcAttr: ["'unsafe-inline'"],
       },
     },
