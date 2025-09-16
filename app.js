@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const path = require('path');
+
 require('dotenv').config();
+
 const mongoose = require('./config/mongoose-connection');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -39,7 +41,17 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
-app.use(helmet());
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", 'https://res.cloudinary.com', 'data:'],
+      },
+    },
+  }),
+);
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -107,6 +119,10 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 4400;
 
-app.listen(PORT, () => {
-  logger.info(`Server up and running on ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    logger.info(`Server up and running on ${PORT}`);
+  });
+}
+
+module.exports = app;

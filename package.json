@@ -30,7 +30,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -56,6 +56,8 @@
   "homepage": "https://github.com/bhavneet334/Luxane#readme",
   "description": "Full-stack e-commerce admin panel with server-side rendering, AI powered product management, JWT authentication, and MongoDB integration.",
   "devDependencies": {
-    "prettier": "^3.6.2"
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2",
+    "supertest": "^7.2.2"
   }
 }
