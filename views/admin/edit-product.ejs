@@ -90,8 +90,9 @@
                 <div class="form-row">
                     <label for="description">
                         Description
-                        <button type="submit" formaction="/owners/products/generate-description" formmethod="POST" class="btn-ai-generate">
-                            ✨ Generate with AI
+                        <button type="submit" formaction="/owners/products/generate-description" formmethod="POST" class="btn-ai-generate" id="generate-ai-button">
+                            <span id="aiBtnText">✨ Generate with AI</span>
+                            <span id="aiBtnTimer" style="display: none;"></span>
                         </button>
                     </label>
                     <textarea
@@ -130,5 +131,6 @@
 
         </main>
     </div>
+    <script src="/javascripts/ai-generate-timer.js"></script>
 </body>
 </html>

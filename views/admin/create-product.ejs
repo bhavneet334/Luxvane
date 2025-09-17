@@ -65,8 +65,9 @@
           <div class="form-row">
             <label for="description">
               Description
-              <button type="submit" formaction="/owners/products/generate-description" formmethod="POST" class="btn-ai-generate">
-                ✨ Generate with AI
+              <button type="submit" formaction="/owners/products/generate-description" formmethod="POST" class="btn-ai-generate" id="generate-ai-button">
+                <span id="aiBtnText">✨ Generate with AI</span>
+                <span id="aiBtnTimer" style="display: none;"></span>
               </button>
             </label>
             <textarea id="description" name="description" rows="3" placeholder="Description" maxlength="2000"><%= typeof generatedDescription !== 'undefined' ? generatedDescription : (typeof formData !== 'undefined' && formData && formData.description ? formData.description : '') %></textarea>
@@ -92,5 +93,6 @@
         </form>
       </main>
     </div>
+    <script src="/javascripts/ai-generate-timer.js"></script>
   </body>
 </html>
